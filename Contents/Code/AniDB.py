@@ -359,12 +359,10 @@ def GetAniDBTitle(titles, lang=None, title_sort=False):
   return langTitles[index], langTitles[languages.index('main') if 'main' in languages else 1 if 1 in langTitles else 0], index
 
 def summary_sanitizer(summary):
-  summary = summary.replace("`", "'")                                                                # Replace backquote with single quote
-  summary = re.sub(r'https?://anidb\.net/[a-z]{1,2}[0-9]+ \[(?P<text>.+?)\]', r'\g<text>', summary)  # Replace links
-  summary = re.sub(r'^\* .*',                     "",      summary, flags=re.MULTILINE)  # Remove the line if it starts with '* '
-  summary = re.sub(r'\n(Source|Note|Summary):.*', "",      summary, flags=re.DOTALL)     # Remove all lines after this is seen
-  summary = re.sub(r'\n\n+',                      r'\n\n', summary, flags=re.DOTALL)     # Condense multiple empty lines
-  return summary.strip(" \n")
+  summary = summary.replace("`", "'")                                                      # Replace backquote with single quote
+  summary = re.sub(r'http://anidb\.net/[a-z]{1,2}[0-9]+ \[(.+?)\]',       r'\1', summary)  # Replace links
+  summary = re.sub(r'^\* B.*\n+|\nSource:\w*[\w\W]*|\nNote:\w*[\w\W]*()', "",    summary)  # Remove Source and M=Notes
+  return summary
   
 def WordsScore(words, title_cleansed):
   ''' Score word compared to string in percents
