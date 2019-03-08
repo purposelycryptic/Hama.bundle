@@ -158,7 +158,7 @@ def GetMetadata(media, movie, error_log, source, AniDBid, TVDBid, AniDBMovieSets
         if SaveDict(summary_sanitizer(GetXml(xml, 'description')), AniDB_dict, 'summary') and not movie and Dict(mappingList, 'defaulttvdbseason').isdigit() and mappingList['defaulttvdbseason'] in media.seasons:
           SaveDict(AniDB_dict['summary'], AniDB_dict, 'seasons', mappingList['defaulttvdbseason'], 'summary') 
             
-        Log.Info("[ ] rating: '{}'".format(SaveDict( GetXml(xml, 'ratings/permanent'), AniDB_dict, 'rating')))
+        Log.Info("[ ] rating: '{}'".format(SaveDict( GetXml(xml, 'ratings/temporary'), AniDB_dict, 'rating')))
         
         ### Posters
         if GetXml(xml, 'picture'):
