@@ -87,6 +87,7 @@ def Search(results, media, lang, manual, movie):
     return
   
   ### Check if a guid is specified "Show name [anidb-id]" ###
+  Log.Info('--- force id ---'.ljust(157, '-'))
   match = re.search(r"(?P<show>.*?) ?\[(?P<source>([a-z0-9]*))-(tt)?(?P<guid>[0-9]{1,7})\]", orig_title, re.IGNORECASE) if ' [' in orig_title else None
   if match is not None:
     guid=match.group('source') + '-' + match.group('guid')
@@ -94,6 +95,7 @@ def Search(results, media, lang, manual, movie):
     results.Append(MetadataSearchResult(id=guid, name=match.group('show')+" ["+guid+']', year=media.year, lang=lang, score=100))
     Log.Info("Forced ID - source: {}, id: {}, title: '{}'".format(match.group('source'), match.group('guid'), match.group('show')))
   else:  #if media.year is not None:  orig_title = orig_title + " (" + str(media.year) + ")"  ### Year - if present (manual search or from scanner but not mine), include in title ###
+    Log.Info('--- source searches ---'.ljust(157, '-'))
     maxi, n = 0, 0
     if movie or max(map(int, media.seasons.keys()))<=1:  maxi, n =         AniDB.Search(results, media, lang, manual, movie)
     if maxi<50 and movie:                                maxi    =    TheMovieDb.Search(results, media, lang, manual, movie)
@@ -114,9 +116,14 @@ def Update(metadata, media, lang, force, movie):
   Log.Info("id: {}, title: {}, lang: {}, force: {}, movie: {}".format(metadata.id, metadata.title, lang, force, movie))
   Log.Info("start: {}".format(datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S,%f")))
   
+  # Major meta source hard required orders (ignoring id info):
+  #   mappingList:                  AnimeLists->TheTVDBv2/common/AniDB->AdjustMapping
+  #   mappingList['season_map']:    AnimeLists->TheTVDBv2->AdjustMapping
+  #   mappingList['relations_map']: AniDB->AdjustMapping
+  #   mappingList['absolute_map']:  common->TheTVDBv2->AniDB
   dict_AnimeLists, AniDBid, TVDBid, TMDbid, IMDbid, mappingList =  AnimeLists.GetMetadata(media, movie, error_log, metadata.id)
-  dict_TheTVDB,                             IMDbid              =   TheTVDBv2.GetMetadata(media, movie, error_log, lang, source, AniDBid, TVDBid, IMDbid,         mappingList, Dict(AniDB, 'movie'))
   dict_tvdb4                                                    =      common.GetMetadata(media, movie,                  source,          TVDBid,                 mappingList)
+  dict_TheTVDB,                             IMDbid              =   TheTVDBv2.GetMetadata(media, movie, error_log, lang, source, AniDBid, TVDBid, IMDbid,         mappingList, Dict(AniDB, 'movie'))
   dict_AniDB, ANNid, MALid                                      =       AniDB.GetMetadata(media, movie, error_log,       source, AniDBid, TVDBid, AnimeLists.AniDBMovieSets, mappingList)
   dict_TheMovieDb,          TSDbid, TMDbid, IMDbid              =  TheMovieDb.GetMetadata(media, movie,                                   TVDBid, TMDbid, IMDbid)
   dict_FanartTV                                                 =    FanartTV.GetMetadata(       movie,                                   TVDBid, TMDbid, IMDbid)

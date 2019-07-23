@@ -80,7 +80,7 @@ The XMLs are downloaded (cached) and a copy is saved In the agent data folders a
     * anime-titles.xml:	         http://anidb.net/api/anime-titles.xml.gz [API: http://wiki.anidb.net/w/API]
     * anime-list-full.xml:	 Maps the AniDB ID to the TVDB ID, providing studio,episode mapping matrix, tmdb/tmdb id
     * anime-movieset-list.xml: 	 Allows movies to be grouped together
-    * tvdb benner and serie xml: episode titles and summaries, screenshot, posters
+    * tvdb banner and serie xml: episode titles and summaries, screenshot, posters
     * anidb serie xml:           Serie information, poster
     * Plex theme song:           Serie theme song
 
@@ -167,10 +167,7 @@ Folders to copy in Plex main folder:
     * "Scanners"         "Scanners/Series" folder needs creating. Absolute series Scanner.py" goes inside. 
     			 https://raw.githubusercontent.com/ZeroQI/Absolute-Series-Scanner/master/Scanners/Series/Absolute%20Series%20Scanner.py
     * "Plug-ins"         https://github.com/ZeroQI/Hama.bundle > "Clone or download > Download Zip. Copy Hama.bundle-master.zip\Hama.bundle-master in plug-ins folders but rename to "Hama.bundle" (remove -master) 
-    * "Plug-ins support" https://github.com/ZeroQI/Hama.bundle/releases/tag/v1.0 > Plug-in.Support.folders.zip Agent data folders (Plug-ins support/Data/com.plexapp.agents.hama/DataItems/AniDB|OMDB|Plex|TMDB|TVDB) goes inside
 
-    token id file is no longer required as XML.ElementFromURL() is always authenticated
-    
 Here is how to find the plug-in folder location:
 https://support.plex.tv/hc/en-us/articles/201106098-How-do-I-find-the-Plug-Ins-folder-
 
@@ -181,6 +178,7 @@ Plex main folder location:
     * '$HOME/Library/Application Support/Plex Media Server/'                     # Mac OS
     * '$PLEX_HOME/Library/Application Support/Plex Media Server/',               # Linux
     * '/var/lib/plexmediaserver/Library/Application Support/Plex Media Server/', # Debian,Fedora,CentOS,Ubuntu
+    * '/var/lib/plex/Plex Media Server/',                                        # Arch
     * '/usr/local/plexdata/Plex Media Server/',                                  # FreeBSD
     * '/usr/pbi/plexmediaserver-amd64/plexdata/Plex Media Server/',              # FreeNAS
     * '${JAIL_ROOT}/var/db/plexdata/Plex Media Server/',                         # FreeNAS
@@ -190,22 +188,19 @@ Plex main folder location:
     * '/raid0/data/module/Plex/sys/Plex Media Server/',                          # Thecus
     * '/raid0/data/PLEX_CONFIG/Plex Media Server/'                               # Thecus Plex community    
 
-MANDATORY: Hama needs some folders in the agent data folder ("Plug-In Support/Data/com.plexapp.agents.hama/DataItems") and while they should now be auto-created, make sure they are: (folders are included in Zip archive in release tab and nammed "Plug-in.Support.zip"
+Hama auto-creates some folders in the agent data folder ("Plug-In Support/Data/com.plexapp.agents.hama/DataItems")
+- "Logs"
 - "AniDB"
 - "Plex"
 - "OMDB"
 - "TMDB"
-- "TVDB"
-- "TVDB/blank
-- "TVDB/_cache/fanart/original"
+- "TheTVDB"
+- "TheTVDB/banner/graphical"
 - "TVDB/episodes"
 - "TVDB/fanart/original"
-- "TVDB/fanart/vignette"
-- "TVDB/graphical"
+- "TVDB/json"
 - "TVDB/posters"
 - "TVDB/seasons"
-- "TVDB/seasonswide"
-- "TVDB/text"
 - "FanartTV"
 
 Agents can only write data in data folder as binary objects or as dictionaries, but cannot create folders normally (worked  around now).
